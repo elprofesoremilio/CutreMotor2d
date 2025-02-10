@@ -1,0 +1,49 @@
+@startuml
+
+
+package CutreMotor2D {
+
+class Config {
+    + {static} FPS : int
+    + {static} ANCHO_LIENZO : int
+    + {static} ALTO_LIENZO : int
+    + {static} COLOR_FONDO : Color
+    + {static} cargar(rutaArchivo : String) : void {static}
+}
+
+class CutreJuego extends JFrame {
+    - lienzo : CutreLienzo
+    - ejecutando : boolean
+    + CutreJuego()
+    + iniciar() : void
+    + detener() : void
+    + agregarObjeto(obj : CutreObjeto) : void
+}
+
+class CutreLienzo extends JPanel {
+    - objetos : List<CutreObjeto>
+    + CutreLienzo()
+    + actualizar() : void
+    + paintComponent(g : Graphics) : void
+    + agregarObjeto(obj : CutreObjeto) : void
+}
+
+abstract class CutreObjeto {
+    # x : int
+    # y : int
+    # ancho : int
+    # alto : int
+    # imagen : BufferedImage
+    + CutreObjeto(x : int, y : int, ancho : int, alto : int, rutaImagen : String)
+    + {abstract} actualizar() : void
+    + {abstract} dibujar(g : Graphics) : void
+}
+
+CutreJuego --* CutreLienzo : contiene
+CutreLienzo --* CutreObjeto : contiene
+Config -l- CutreJuego : usa
+Config -- CutreLienzo : usa
+Config -- CutreObjeto : usa
+
+}
+@enduml

@@ -1,0 +1,42 @@
+@startuml
+
+package CutreMotor2D {
+    class Config {
+        + {static} FPS : int
+        + {static} ANCHO_LIENZO: int
+        + {static} ALTO_LIENZO: int
+        + {static} cargar(ruta : String)
+    }
+
+    class CutreJuego {
+        - lienzo: CutreLienzo
+        - enEjecucion: boolean
+        + iniciar(): void
+        + detener(): void
+    }
+
+    class CutreLienzo {
+        - ancho: int
+        - alto: int
+        - objetos: List<CutreObjeto>
+        + actualizar(): void
+        + dibujar(Graphics g): void
+        + agregarObjeto(CutreObjeto obj): void
+    }
+
+    class CutreObjeto {
+        - x: int
+        - y: int
+        - ancho: int
+        - alto: int
+        + actualizar(): void
+        + dibujar(Graphics g): void
+    }
+
+    CutreJuego "1" *-- "1" CutreLienzo : contiene
+    CutreLienzo "1" *-- "*" CutreObjeto : contiene
+
+
+}
+
+@enduml
