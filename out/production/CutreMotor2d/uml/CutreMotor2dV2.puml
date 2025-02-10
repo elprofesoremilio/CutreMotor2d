@@ -1,0 +1,110 @@
+@startuml
+class Config {
+    + CANVAS_WIDTH: int
+    + CANVAS_HEIGHT: int
+    + FPS: int
+    + SCALING_FACTOR: double
+    + DEBUG_MODE: boolean
+    --
+    + Config()
+    + getConfigValue(String key): Object
+}
+
+abstract class GameObject {
+    # x: double
+    # y: double
+    # width: double
+    # height: double
+    # sprite: Sprite
+    --
+    + GameObject(double x, double y, double width, double height, String spritePath)
+    + getX(): double
+    + getY(): double
+    + setX(double x): void
+    + setY(double y): void
+    + getWidth(): double
+    + getHeight(): double
+    + abstract update(double deltaTime): void
+    + draw(Graphics2D g2d): void
+    + collidesWith(GameObject other): boolean
+}
+
+class Sprite {
+    - image: Image
+    - filePath: String
+    --
+    + Sprite(String filePath)
+    + getImage(): Image
+}
+
+interface InputHandler {
+    + isKeyPressed(int keyCode): boolean
+    + isMouseButtonPressed(int button): boolean
+    + getMouseX(): int
+    + getMouseY(): int
+}
+
+class KeyInputHandler implements InputHandler {
+    - keys: boolean[]
+    - mouseButtons: boolean[]
+    - mouseX: int
+    - mouseY: int
+    --
+    + KeyInputHandler()
+    + keyPressed(KeyEvent e): void
+    + keyReleased(KeyEvent e): void
+    + mousePressed(MouseEvent e): void
+    + mouseReleased(MouseEvent e): void
+    + mouseMoved(MouseEvent e): void
+    + mouseDragged(MouseEvent e): void
+    + isKeyPressed(int keyCode): boolean
+    + isMouseButtonPressed(int button): boolean
+    + getMouseX(): int
+    + getMouseY(): int
+}
+
+class GamePanel extends JPanel {
+    - gameObjects: List<GameObject>
+    - inputHandler: InputHandler
+    - lastTime: long
+    - bufferStrategy: BufferStrategy
+    --
+    + GamePanel(InputHandler inputHandler)
+    + addGameObject(GameObject gameObject): void
+    + removeGameObject(GameObject gameObject): void
+    + gameLoop(): void
+    + render(): void
+    + update(double deltaTime): void
+    + getInputHandler(): InputHandler
+    + createBufferStrategy(): void
+}
+
+class GameWindow extends JFrame {
+    - gamePanel: GamePanel
+    --
+    + GameWindow(GamePanel gamePanel, String title, int width, int height)
+}
+
+class CutreEngine2D {
+    - config: Config
+    - gameWindow: GameWindow
+    - gamePanel: GamePanel
+    - inputHandler: InputHandler
+    --
+    + CutreEngine2D()
+    + start(): void
+    + getGamePanel(): GamePanel
+    + getInputHandler(): InputHandler
+    + getConfig(): Config
+}
+
+GamePanel --* GameObject : contiene
+GamePanel --o InputHandler : usa
+GameWindow --* GamePanel : contiene
+CutreEngine2D --* GameWindow : crea
+CutreEngine2D --* GamePanel : crea
+CutreEngine2D ..> Config : usa
+CutreEngine2D --* InputHandler : usa
+GameObject --* Sprite : contiene
+
+@enduml
