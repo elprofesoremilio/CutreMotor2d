@@ -10,12 +10,13 @@ public class CutreJuego extends JFrame {
 
         setTitle("CutreMotor2D");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
 
         lienzo = new CutreLienzo();
         add(lienzo);
 
         pack(); // Ajusta la ventana al tamaño del lienzo
+        setLocationRelativeTo(null);
+
         setVisible(true);
     }
 
